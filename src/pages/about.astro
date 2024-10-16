@@ -1,16 +1,67 @@
+---
+const PageTitle = "About Me";
+
+const identity ={
+    name: "Vĩnh An",
+    age: (new Date()).getFullYear() - 1989,
+    email: "darkmager@gmail.com",
+    country: "Vietnam",
+    occupation: "Full Stack Developer, Chess Coach, Chess Player, Writer",
+    company: "Caissa Chess School",
+    hobby: "Coding, Reading, Chess, Traveling"
+};
+const skills = [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Astro",
+    "Tailwind CSS",
+    "PHP",
+    "Laravel",
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "Docker",
+    "Kubernetes",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "Bitbucket",
+    "AWS",
+    "Azure",
+    "GCP",
+    "DigitalOcean",
+    "Vercel",
+    "Netlify",
+    "Cloudflare",
+    "Cloudflare Workers",
+    "Cloudflare R2",
+    
+];
+
+const happy = true;
+const finished = false;
+const goal = 3;
+---
+
+
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>About Me</title>
+		<title>{PageTitle}</title>
 	</head>
 	<body>
         <a href="/">Home</a>
         <a href="/about/">About</a>
         <a href="/blog/">Blog</a>
-		<h1>About Me</h1>
+		<h1>{PageTitle}</h1>
         <h2> ... and my new Astro site!</h2>
 
         <p>
@@ -21,5 +72,24 @@
            This site is built with Astro. I'm using it to learn more about the framework and to share my thoughts on it with you.
            This site will update as I learn more about Astro and as I build more things with it.
         </p>
+
+        <p> Here are few things about me: </p>
+        <ul>
+            <li>My Name is {identity.name}.</li>
+            <li>I'm {identity.age} years old.</li>
+            <li>My email is {identity.email}.</li>
+            <li>I'm from {identity.country}.</li>
+            <li>I'm a {identity.occupation}.</li>
+            <li>Now I work at {identity.company}.</li>
+            <li>My hobby is {identity.hobby[0]}, {identity.hobby[1]} and {identity.hobby[2]}.</li>
+        </ul>
+        <p>My skills are:</p>
+        <ul>
+            {skills.map(skill => <li>{skill}</li>)}
+        </ul>
+
+        {happy && <p> I am happy to be learning Astro!</p>}
+        {finished && <p> I am finished with this site!</p>}
+        {goal == 3 && <p> I am on goal {goal} days to finish this site!</p>}
 	</body>
 </html>
