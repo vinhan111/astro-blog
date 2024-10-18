@@ -1,0 +1,38 @@
+---
+const year = new Date().getFullYear();
+const name = "Vinh An";
+const email = "darkmager@gmail.com";
+const phone = "0909 222 3333";
+const address = "1234 Main St, Hanoi, Vietnam";
+import Social from "./Social.astro";
+---
+
+<footer>
+    <p>Copyright {year} designed by {name}</p>
+    <p>Contact me at <a href={`mailto:${email}`}>{email}</a></p>
+    <p>Call me at <a href={`tel:${phone}`}>{phone}</a></p>
+    <Social platform="github" username="vinhan111" />
+    <Social platform="facebook" username="hujista" />
+    <Social platform="linkedin" username="in/an-pham-neodrakz-38a19a228" />
+</footer>
+
+<style>
+    footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2rem;
+        gap: 1rem;
+        padding: 2rem;
+        background-color: #1e293b;
+        color: #fff;
+    }
+    footer a {
+        color: #45ad11;
+        text-decoration: none;
+    }
+    footer a:hover {
+        color: #6366f1;
+    }
+</style>

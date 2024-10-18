@@ -1,0 +1,45 @@
+@import 'https://unpkg.com/chessground/assets/chessground.base.css';
+@import 'https://unpkg.com/chessground/assets/chessground.brown.css';
+@import 'https://unpkg.com/chessground/assets/chessground.cburnett.css';
+
+
+html {
+    background-color: #f1f5f9;
+    font-family: sans-serif;
+  }
+  
+  body {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 80ch;
+    padding: 1rem;
+    line-height: 1.5;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  h1 {
+    margin: 1rem 0;
+    font-size: 2.5rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    top: 5rem;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .nav-links a:hover {
+    color: #6366f1;
+  }
+
+  .nav-links a {
+    color: #4c1d95;
+    text-decoration: none;
+  }
+

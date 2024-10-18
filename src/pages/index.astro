@@ -1,19 +1,219 @@
 ---
-const PageTitle = "Home";
+import Layout from '../layouts/Layout.astro';
+import Chessboard from '../components/Chessboard-withlogic.astro';
+
+const featuredLessons = [
+  { id: 1, title: 'Luật cơ bản cờ vua', level: 'Cơ bản' },
+  { id: 2, title: 'Chiến thuật cơ bản', level: 'Trung cấp' },
+  { id: 3, title: 'Khai cuộc phổ biến', level: 'Trung cấp' },
+];
+
+const featuredGames = [
+  { id: 1, title: 'Puzzle Rush', difficulty: 'Trung bình' },
+  { id: 2, title: 'Survival Mode', difficulty: 'Khó' },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{PageTitle}</title>
-	</head>
-	<body>
-        <a href="/">Home</a>
-        <a href="/about/">About</a>
-        <a href="/blog/">Blog</a>
-		<h1>{PageTitle}</h1>
-	</body>
-</html>
+<Layout title="Trang chủ - Website Cờ Vua">
+	<main>
+		<section class="hero">
+			<div class="hero-content">
+				<h1>Chào mừng đến với Website Cờ Vua</h1>
+				<p>Nâng cao kỹ năng cờ vua của bạn với các bài học, mini-game và câu đố hấp dẫn!</p>
+				<a href="/lessons" class="cta-button">Bắt đầu học ngay</a>
+			</div>
+			<div class="hero-image">
+				<Chessboard />
+			</div>
+		</section>
+
+		<section class="featured-content">
+			<div class="featured-lessons">
+				<h2>Bài học nổi bật</h2>
+				<ul>
+					{featuredLessons.map((lesson) => (
+						<li>
+							<a href={`/lessons/${lesson.id}`}>
+								<span class="lesson-title">{lesson.title}</span>
+								<span class="lesson-level">{lesson.level}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+				<a href="/lessons" class="see-all">Xem tất cả bài học</a>
+			</div>
+
+			<div class="featured-games">
+				<h2>Mini-game nổi bật</h2>
+				<ul>
+					{featuredGames.map((game) => (
+						<li>
+							<a href={`/mini-games/${game.id}`}>
+								<span class="game-title">{game.title}</span>
+								<span class="game-difficulty">{game.difficulty}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+				<a href="/mini-games" class="see-all">Xem tất cả mini-game</a>
+			</div>
+		</section>
+
+		<section class="latest-blog">
+			<h2>Bài viết mới nhất</h2>
+			<div class="blog-preview">
+				<h3>Phân tích ván đấu Đại kiện tướng</h3>
+				<p>Khám phá những nước đi xuất sắc và chiến thuật tinh tế trong ván đấu gần đây giữa hai Đại kiện tướng hàng đầu thế giới.</p>
+				<a href="/blog/latest-analysis" class="read-more">Đọc tiếp</a>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	main {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+	}
+
+	.hero {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 4rem;
+		background-color: var(--card-background);
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.hero-content {
+		flex: 1;
+		padding: 2rem;
+	}
+
+	.hero h1 {
+		font-size: 2.5rem;
+		color: var(--text-color);
+		margin-bottom: 1rem;
+	}
+
+	.hero p {
+		font-size: 1.1rem;
+		color: var(--text-light);
+		margin-bottom: 2rem;
+	}
+
+	.cta-button {
+		display: inline-block;
+		background-color: var(--accent-color);
+		color: white;
+		padding: 0.8rem 1.5rem;
+		border-radius: 5px;
+		text-decoration: none;
+		font-weight: bold;
+		transition: background-color 0.3s;
+	}
+
+	.cta-button:hover {
+		background-color: #c741a3;
+	}
+
+	.hero-image {
+		flex: 1;
+		padding: 2rem;
+	}
+
+	.featured-content {
+		display: flex;
+		gap: 2rem;
+		margin-bottom: 4rem;
+	}
+
+	.featured-lessons, .featured-games {
+		flex: 1;
+		background-color: var(--card-background);
+		border-radius: 10px;
+		padding: 1.5rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		color: var(--text-color);
+		margin-bottom: 1rem;
+	}
+
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	li {
+		margin-bottom: 1rem;
+	}
+
+	li a {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		text-decoration: none;
+		color: var(--text-color);
+		padding: 0.5rem;
+		border-radius: 5px;
+		transition: background-color 0.3s;
+	}
+
+	li a:hover {
+		background-color: var(--secondary-color);
+	}
+
+	.lesson-level, .game-difficulty {
+		font-size: 0.8rem;
+		color: var(--text-light);
+	}
+
+	.see-all {
+		display: block;
+		text-align: right;
+		margin-top: 1rem;
+		color: var(--accent-color);
+		text-decoration: none;
+	}
+
+	.latest-blog {
+		background-color: var(--card-background);
+		border-radius: 10px;
+		padding: 1.5rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.blog-preview h3 {
+		font-size: 1.2rem;
+		color: var(--text-color);
+		margin-bottom: 0.5rem;
+	}
+
+	.blog-preview p {
+		font-size: 0.9rem;
+		color: var(--text-light);
+		margin-bottom: 1rem;
+	}
+
+	.read-more {
+		color: var(--accent-color);
+		text-decoration: none;
+		font-weight: bold;
+	}
+
+	@media (max-width: 768px) {
+		.hero, .featured-content {
+			flex-direction: column;
+		}
+
+		.hero-image {
+			order: -1;
+		}
+	}
+</style>

@@ -1,0 +1,215 @@
+---
+import Icon from '../icons.astro';
+
+interface Square {
+  row: number;
+  col: number;
+}
+
+const initializeBoard = (): ('rook' | 'star' | null)[][] => {
+  const board: ('rook' | 'star' | null)[][] = Array(8).fill(null).map(() => Array(8).fill(null));
+  board[0][0] = 'rook'; // Đặt quân xe ở góc trái trên
+
+  // Đặt 3 ngôi sao ngẫu nhiên
+  let starsPlaced = 0;
+  while (starsPlaced < 3) {
+    const row = Math.floor(Math.random() * 8);
+    const col = Math.floor(Math.random() * 8);
+    if (board[row][col] === null) {
+      board[row][col] = 'star';
+      starsPlaced++;
+    }
+  }
+
+  return board;
+};
+
+const isValidRookMove = (start: Square, end: Square): boolean => {
+  return start.row === end.row || start.col === end.col;
+};
+
+const getRandomAdjacentMove = (start: Square, board: ('rook' | 'star' | null)[][]): Square | null => {
+  const possibleMoves = [
+    { row: start.row - 1, col: start.col },
+    { row: start.row + 1, col: start.col },
+    { row: start.row, col: start.col - 1 },
+    { row: start.row, col: start.col + 1 }
+  ].filter(move => 
+    move.row >= 0 && move.row < 8 && move.col >= 0 && move.col < 8 && board[move.row][move.col] === null
+  );
+
+  return possibleMoves.length > 0 ? possibleMoves[Math.floor(Math.random() * possibleMoves.length)] : null;
+};
+---
+
+<div class="flex flex-col items-center justify-center min-h-screen bg-yellow-100 p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl">
+    <div class="flex justify-between items-center mb-4">
+      <button class="text-red-500">
+        <Icon name="x" class="w-8 h-8" />
+      </button>
+      <div class="flex items-center space-x-2 bg-black text-white px-3 py-1 rounded-full">
+        <span class="text-lg font-bold" id="score">0 / 3</span>
+        {[1, 2, 3].map((_, index) => (
+          <Icon name="star" class={`w-6 h-6 text-gray-400 star-${index}`} />
+        ))}
+      </div>
+    </div>
+    
+    <div id='chessboard' class="chessboard"></div>
+    
+    <div class="flex justify-between items-center mt-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded-full">
+        <Icon name="cog" class="w-6 h-6" />
+      </button>
+      
+      <button class="bg-blue-500 text-white px-4 py-2 rounded-full" type="button">
+        <Icon name="help-circle" class="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { Chessground } from '/node_modules/chessground/dist/chessground.min.js';
+
+  const initializeBoard = () => {
+    const board = Array(8).fill(null).map(() => Array(8).fill(null));
+    board[0][0] = 'rook';
+    let starsPlaced = 0;
+    while (starsPlaced < 3) {
+      const row = Math.floor(Math.random() * 8);
+      const col = Math.floor(Math.random() * 8);
+      if (board[row][col] === null) {
+        board[row][col] = 'star';
+        starsPlaced++;
+      }
+    }
+    return board;
+  };
+
+  const isValidRookMove = (start, end) => {
+    return start.row === end.row || start.col === end.col;
+  };
+
+  const getRandomAdjacentMove = (start, board) => {
+    const possibleMoves = [
+      { row: start.row - 1, col: start.col },
+      { row: start.row + 1, col: start.col },
+      { row: start.row, col: start.col - 1 },
+      { row: start.row, col: start.col + 1 }
+    ].filter(move => 
+      move.row >= 0 && move.row < 8 && move.col >= 0 && move.col < 8 && board[move.row][move.col] === null
+    );
+
+    return possibleMoves.length > 0 ? possibleMoves[Math.floor(Math.random() * possibleMoves.length)] : null;
+  };
+
+  let board = initializeBoard();
+  let score = 0;
+
+  const chessboard = document.getElementById('chessboard');
+  const scoreElement = document.getElementById('score');
+
+  const config = {
+    position: board,
+    movable: {
+      free: false,
+      dests: getDests(),
+      events: {
+        after: onMove,
+      },
+    },
+    draggable: {
+      showGhost: true,
+    },
+  };
+
+  const ground = Chessground(chessboard, config);
+
+  function getDests() {
+    const dests = new Map();
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (board[row][col] === 'rook') {
+          const moves = [];
+          for (let i = 0; i < 8; i++) {
+            if (i !== row) moves.push([i, col]);
+            if (i !== col) moves.push([row, i]);
+          }
+          dests.set(`${row}${col}`, moves.map(m => `${m[0]}${m[1]}`));
+        }
+      }
+    }
+    return dests;
+  }
+
+  function onMove(orig, dest) {
+    const [startRow, startCol] = orig.split('').map(Number);
+    const [endRow, endCol] = dest.split('').map(Number);
+
+    if (board[endRow][endCol] === 'star') {
+      score++;
+      updateScore();
+    }
+
+    board[endRow][endCol] = board[startRow][startCol];
+    board[startRow][startCol] = null;
+
+    moveStars();
+    updateBoard();
+
+    if (score === 3) {
+      alert('Congratulations! You won!');
+    }
+  }
+
+  function moveStars() {
+    const newBoard = board.map(row => [...row]);
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (board[row][col] === 'star') {
+          const newPosition = getRandomAdjacentMove({row, col}, board);
+          if (newPosition) {
+            newBoard[newPosition.row][newPosition.col] = 'star';
+            newBoard[row][col] = null;
+          }
+        }
+      }
+    }
+    board = newBoard;
+  }
+
+  function updateBoard() {
+    ground.set({ position: board });
+  }
+
+  function updateScore() {
+    scoreElement.textContent = `${score} / 3`;
+    for (let i = 0; i < 3; i++) {
+      const star = document.querySelector(`.star-${i}`);
+      if (i < score) {
+        star.classList.remove('text-gray-400');
+        star.classList.add('text-yellow-400', 'fill-current');
+      } else {
+        star.classList.remove('text-yellow-400', 'fill-current');
+        star.classList.add('text-gray-400');
+      }
+    }
+  }
+
+  updateBoard();
+  updateScore();
+</script>
+
+<style>
+  .chessboard {
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+  }
+</style>
+
+<link rel="stylesheet" href="/node_modules/chessground/assets/chessground.base.css">
+<link rel="stylesheet" href="/node_modules/chessground/assets/chessground.brown.css">
+<link rel="stylesheet" href="/node_modules/chessground/assets/chessground.cburnett.css">

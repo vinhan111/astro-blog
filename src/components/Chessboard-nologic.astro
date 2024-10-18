@@ -1,0 +1,36 @@
+---
+export interface Props {
+  width?: string;
+  height?: string;
+  fen?: string;
+  id?: string;
+}
+
+const { width = '400px', height = '400px', fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', id = 'chessboard' } = Astro.props;
+---
+
+<div id={id} class="chessboard"></div>
+
+<script define:vars={{ fen, id }} type="module">
+  import { Chessground } from '/node_modules/chessground/dist/chessground.min.js';
+
+  const chessboard = document.getElementById(id);
+  const config = {
+    fen: fen,
+    // ... other configuration options ...
+  }
+  const ground = Chessground(chessboard, config);
+</script>
+
+<style define:vars={{ width, height }}>
+  .chessboard {
+    margin: 2rem auto;
+    width: var(--width);
+    height: var(--height);
+    border: 1px solid #000;
+  }
+</style>
+
+<link rel="stylesheet" href="/node_modules/chessground/assets/chessground.base.css">
+<link rel="stylesheet" href="/node_modules/chessground/assets/chessground.brown.css">
+<link rel="stylesheet" href="/node_modules/chessground/assets/chessground.cburnett.css">

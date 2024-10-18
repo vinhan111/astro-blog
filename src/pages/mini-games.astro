@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const miniGames = [
+  { id: 1, title: 'Puzzle Rush', description: 'Giải càng nhiều câu đố càng tốt trong thời gian giới hạn', difficulty: 'Trung bình' },
+  { id: 2, title: 'Survival Mode', description: 'Đấu với AI và cố gắng sống sót càng lâu càng tốt', difficulty: 'Khó' },
+  { id: 3, title: 'Pattern Recognition', description: 'Nhận diện các mẫu chiến thuật phổ biến', difficulty: 'Dễ' },
+  { id: 4, title: 'Blindfold Chess', description: 'Chơi cờ vua mà không nhìn bàn cờ', difficulty: 'Rất khó' },
+  { id: 5, title: 'Bishop Game', description: 'Di chuyển quân tượng để đánh bại quái vật', difficulty: 'Trung bình' },
+];
+---
+
+<Layout title="Mini-games - Website Cờ Vua">
+  <main class="mini-games-page">
+    <h1>Mini-games Cờ Vua</h1>
+    <p class="intro">Thử thách bản thân với các mini-game cờ vua hấp dẫn. Nâng cao kỹ năng và tận hưởng niềm vui!</p>
+    
+    <div class="game-grid">
+      {miniGames.map((game) => (
+        <div class="game-card">
+          <h3>{game.title}</h3>
+          <p class="game-description">{game.description}</p>
+          <p class="game-difficulty">Độ khó: <span>{game.difficulty}</span></p>
+          <a href={`/mini-games/${game.id === 5 ? 'bishop' : game.id}`} class="play-btn">Chơi ngay</a>
+        </div>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .mini-games-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .intro {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .game-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .game-card h3 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .game-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+  }
+
+  .game-difficulty {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+
+  .game-difficulty span {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .play-btn {
+    display: inline-block;
+    background-color: #4a4a4a;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    text-align: center;
+  }
+
+  .play-btn:hover {
+    background-color: #333;
+  }
+</style>

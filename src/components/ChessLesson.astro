@@ -1,0 +1,157 @@
+---
+import Chessboard from './chessboard-nologic.astro';
+
+export interface Props {
+  title: string;
+  content: string;
+  initialFen: string;
+  nextFen: string;
+}
+
+const { title, content, initialFen, nextFen } = Astro.props;
+---
+
+<div class="chess-lesson">
+  <div class="chessboard-container">
+    <Chessboard fen={initialFen} id="lessonChessboard" />
+    <div class="controls">
+      <button class="control-btn" id="playAgain">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v6h6"></path><path d="M3 13a9 9 0 1 0 3-7.7L3 8"></path></svg>
+        Play again
+      </button>
+      <div class="navigation">
+        <button class="nav-btn" id="first">&lt;&lt;</button>
+        <button class="nav-btn" id="prev">&lt;</button>
+        <button class="nav-btn" id="next">&gt;</button>
+        <button class="nav-btn" id="last">&gt;&gt; </button>
+      </div>
+      <button class="control-btn" id="nextPosition">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        Next position
+      </button>
+    </div>
+  </div>
+  <div class="lesson-content">
+    <h2>{title}</h2>
+    <div class="tabs">
+      <button class="tab active" data-tab="info">Info</button>
+      <button class="tab" data-tab="moves">Moves</button>
+    </div>
+    <div class="tab-content" id="info">
+      <p set:html={content}></p>
+    </div>
+    <div class="tab-content" id="moves" style="display: none;">
+      <!-- Add moves content here -->
+    </div>
+  </div>
+</div>
+
+<style>
+  .chess-lesson {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  .chessboard-container {
+    flex: 1;
+    margin-right: 20px;
+  }
+  .controls {
+    margin-top: 20px;
+  }
+  .control-btn, .nav-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  .control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .control-btn svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  .navigation {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .lesson-content {
+    flex: 1;
+  }
+  .tabs {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .tab {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .tab.active {
+    background-color: #e0e0e0;
+  }
+</style>
+
+<script define:vars={{ initialFen, nextFen }} type="module">
+  import { Chessground } from '/node_modules/chessground/dist/chessground.min.js';
+
+  const chessboard = document.getElementById('lessonChessboard');
+  let ground;
+
+  if (chessboard) {
+    ground = Chessground(chessboard, {
+      fen: initialFen,
+    });
+  }
+
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const tabId = tab.getAttribute('data-tab');
+      tabContents.forEach(content => {
+        if (content instanceof HTMLElement) {
+          content.style.display = content.id === tabId ? 'block' : 'none';
+        }
+      });
+    });
+  });
+
+  // Function to handle the "Next position" button
+  function handleNextPosition() {
+    if (ground) {
+      ground.set({ fen: nextFen });
+    }
+  }
+
+  // Function to handle the "Play again" (reset) button
+  function handleReset() {
+    if (ground) {
+      ground.set({ fen: initialFen });
+    }
+  }
+
+  // Add event listeners to the buttons
+  const nextPositionBtn = document.getElementById('nextPosition');
+  const playAgainBtn = document.getElementById('playAgain');
+
+  if (nextPositionBtn) {
+    nextPositionBtn.addEventListener('click', handleNextPosition);
+  }
+
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener('click', handleReset);
+  }
+</script>

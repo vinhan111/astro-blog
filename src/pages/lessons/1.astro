@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ChessLesson from '../../components/ChessLesson.astro';
+
+const lessonTitle = "Luật cờ: bàn cờ vua";
+const lessonContent = `
+  <h3>Bàn cờ và cách sắp xếp quân cờ</h3>
+  <p>Bàn cờ vua có 64 ô vuông, xếp thành 8 hàng và 8 cột. Các quân cờ được xếp như sau:</p>
+  <ul>
+    <li>Hàng đầu tiên: Xe, Mã, Tượng, Hậu, Vua, Tượng, Mã, Xe</li>
+    <li>Hàng thứ hai: 8 quân Tốt</li>
+  </ul>
+`;
+const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const nextFen = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"; // Example next position
+---
+
+<Layout title="Bài học cờ vua">
+  <main>
+    <ChessLesson 
+      title={lessonTitle}
+      content={lessonContent}
+      initialFen={initialFen}
+      nextFen={nextFen}
+    />
+  </main>
+</Layout>
